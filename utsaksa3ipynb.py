@@ -9,13 +9,8 @@ Original file is located at
 
 import numpy as np # linear algebra
 import pandas as pd
-from google.colab import drive
-drive.mount('/content/drive')
 
-import pandas as pd
-
-# tempat file
-path = "/content/drive/MyDrive/New/heart.csv"
+filePath = 'https://raw.githubusercontent.com/aksajr/aksa/main/heart.csv' 
 
 # Baca file CSV ke dalam dataframe
 df = pd.read_csv(path)
