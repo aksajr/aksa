@@ -13,7 +13,7 @@ import pandas as pd
 filePath = 'https://raw.githubusercontent.com/aksajr/aksa/main/heart.csv'
 
 # Baca file CSV ke dalam dataframe
-pd.read_csv(path)
+df = pd.read_csv(filePath)
 
 #
 df.head()
