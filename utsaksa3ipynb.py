@@ -10,7 +10,7 @@ Original file is located at
 import numpy as np # linear algebra
 import pandas as pd
 
-filePath = 'https://raw.githubusercontent.com/aksajr/aksa/main/heart.csv' 
+filePath = 'https://raw.githubusercontent.com/mount/src/aksa/utsaksa3ipynb.py 
 
 # Baca file CSV ke dalam dataframe
 pd.read_csv(path)
