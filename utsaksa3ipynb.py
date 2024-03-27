@@ -9,41 +9,35 @@ Original file is located at
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt  # Menambahkan import matplotlib
+import seaborn as sns  # Add import statement for seaborn
 
 filePath = 'https://raw.githubusercontent.com/aksajr/aksa/main/heart.csv'
 
 # Baca file CSV ke dalam dataframe
 df = pd.read_csv(filePath)
 
-# Menampilkan 5 baris pertama
-print(df.head())
+df.head()
 
-# Informasi dataset
-print(df.info())
+df.info()
 
-# Menetapkan variabel
 num = ['age' , 'sex', 'cp', 'trestbps', 'chol',  'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
 
-# Statistik deskriptif untuk variabel numerik
-print(df[num].describe())
+df[num].describe()
 
-# Korelasi antar variabel numerik
-print(df.corr())
+df.corr()
 
 # Membuat plot countplot menggunakan Seaborn
-plt.figure(figsize=(10, 6))
 sns.countplot(data=df, x="age", hue="target")
 
-# Variabel independen dan dependen
-num = df.drop(['target'], axis=1)  # Variabel Numerik (Independen)
+df.head()
+
+x = df.drop(['target'], axis=1)  # Variabel Numerik (Independen)
 y = df['target']  # Variabel Dependen
 
 from sklearn.model_selection import train_test_split
 
-# Split data set menjadi 80:20
-x_train, x_test, y_train, y_test = train_test_split(num, y, test_size=0.2, random_state=42)  # Mengganti x menjadi num
+#Split data set menjadi 80:20
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
 # Standardize the features
 from sklearn.preprocessing import StandardScaler
@@ -52,110 +46,21 @@ scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-# Check x_train and x_test
-print(x_train.shape, x_test.shape)
+x_train.shape, x_test.shape
 
 from sklearn.linear_model import LogisticRegression
+
 from sklearn.metrics import accuracy_score
 
-# Membuat model logistic regression
+#membuat model logistic regression
 logreg = LogisticRegression()
 
-# Melatih model
+# melatih model
 logreg.fit(x_train, y_train)
 
-# Membuat variabel prediksi
+# membuat variabel prediksi
 y_pred = logreg.predict(x_test)
 
-# Menghitung nilai accuracy model
+# menghitung nilai accuracy model
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy of Logistic Regression model:", accuracy)
-
-from sklearn.ensemble import RandomForestClassifier
-
-# Membuat model random forest classifier
-rfc = RandomForestClassifier()
-rfc.fit(x_train, y_train)
-
-# Melatih model
-y_pred = rfc.predict(x_test)
-
-# Membuat variabel prediksi
-accuracy = accuracy_score(y_test, y_pred)
-
-# Menghitung nilai accuracy model
-print("Accuracy on the test set:", accuracy)
-
-from sklearn.model_selection import GridSearchCV
-
-# Mendefinisikan model
-LR = LogisticRegression()
-
-# Hyperparameters
-parameters = [{'penalty': ['l2'], 'C': [0.1, 0.4, 0.5], 'random_state': [0]}]
-
-# Mendefinisikan search dengan cross validation
-search = GridSearchCV(LR, parameters, scoring='accuracy', n_jobs=-1)
-
-# Hasil
-result = search.fit(x_train, y_train)
-# Hasil
-print('Best Score: %s' % result.best_score_)
-print('Best Hyperparameters: %s' % result.best_params_)
-
-# Mendefinisikan model
-Rfc = RandomForestClassifier()
-
-# Hyperparameters
-parameters = [{'max_depth': np.arange(5, 10), 'min_samples_split': np.arange(2, 3),
-               'n_estimators': np.arange(10, 20), 'criterion': ["gini", "entropy"]}]
-
-# Mendefinisikan search dengan cross validation
-search = GridSearchCV(Rfc, parameters, scoring='accuracy', n_jobs=-1)
-
-# Hasil
-result = search.fit(x_train, y_train)
-
-# Hasil
-print('Best Score: %s' % result.best_score_)
-print('Best Hyperparameters: %s' % result.best_params_)
-
-# Build the model
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-
-import tensorflow as tf
-model = tf.keras.Sequential([
-tf.keras.layers.Dense(16, activation='relu'),
-tf.keras.layers.Dense(16, activation='relu'),
-tf.keras.layers.Dense(1, activation='sigmoid')
-])
-
-model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
-loss=tf.keras.losses.BinaryCrossentropy(),
-metrics=['accuracy'])
-
-model.fit(x_train, y_train, batch_size=16, epochs=25, validation_data=(x_test, y_test))
-
-# Assuming you have already defined and fitted the scaler object named 'scaler'
-
-# Define the new summary
-new_summary = np.array([[52, 1, 0, 125, 212, 0, 1, 168, 0, 1.0, 2, 2, 3]])
-
-# Scale the new summary using the scaler
-new_summary_scaled = scaler.transform(new_summary)
-
-# Prediksi dengan menggunakan model yang telah dilatih
-predictions = model.predict(new_summary_scaled)
-
-# Konversi ke yes atau no dengan threshold (0.5)
-binary_predictions = (predictions > 0.5).astype(int)
-
-print(f"Predicted Probability: {predictions[0][0]}")
-print(f"Binary Prediction: {binary_predictions[0][0]}")
-print()
-
-if (binary_predictions==0):
-    print("Sakit Jantung...")
-else:
-    print("Tidak Sakit Jantung")
