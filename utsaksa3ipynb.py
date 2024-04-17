@@ -1,7 +1,8 @@
 # Import the necessary libraries
 import numpy as np
 import pandas as pd
-import seaborn as sns  # Add import statement for seaborn
+import seaborn as sns 
+pip install seaborn
 
 # Assuming the file path is correct
 filePath = 'https://raw.githubusercontent.com/aksajr/aksa/main/heart.csv'
